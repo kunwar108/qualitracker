@@ -1,0 +1,35 @@
+name: Daily Automatic Job Update
+
+on:
+  schedule:
+    # यह रोज़ रात को भारतीय समयानुसार (IST) खुद ब खुद चलेगा
+    - cron: '0 18 * * *'
+  workflow_dispatch: # इससे आप जब चाहें बटन दबाकर भी तुरंत अपडेट कर सकते हैं
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install requests beautifulsoup4
+
+    - name: Run Job Scraper Script
+      run: python update_jobs.py
+
+    - name: Commit and Push Updates automatically
+      run: |
+        git config --global user.name "Automated Job Robot"
+        git config --global user.email "bot@github.com"
+        git add index.html
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-Updated Latest Verified Jobs" && git push)
+
