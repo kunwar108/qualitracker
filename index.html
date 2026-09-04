@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qualitracker | Latest Government Job Alerts</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; padding-bottom: 300px; }
         .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         h1 { color: #333; text-align: center; }
         .job-card { padding: 15px; border-bottom: 1px solid #ddd; margin-bottom: 10px; }
         .job-title { font-size: 18px; color: #007bff; font-weight: bold; text-decoration: none; }
         .job-date { font-size: 12px; color: #888; margin-top: 5px; }
+        
+        /* 📊 Sticky Bottom Ad Styling */
+        .ad-container-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            text-align: center;
+            z-index: 9999;
+            min-height: 100px;
+        }
+        .ad-label { font-size: 10px; color: #aaa; margin-bottom: 5px; display: block; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -19,9 +34,17 @@
         <div id="jobs-container">Loading latest jobs automatically...</div>
     </div>
 
+    <!-- 🎯 Sticky Bottom Ad Placement -->
+    <div class="ad-container-fixed">
+        <span class="ad-label">Sponsored Advertisement</span>
+        <div id="adsterra-banner-wrapper">
+            <!-- Adsterra dynamic ad loads here -->
+        </div>
+    </div>
+
     <script>
-        // Yeh script bina aapke kuch kiye Google ke zariye live job feeds fetch karegi
-        const rssUrl = encodeURIComponent('https://sarkariresult.com'); // Aap yahan kisi bhi site ka feed daal sakte hain
+        // 🤖 1. AUTOMATIC JOB SCRAPER LOGIC
+        const rssUrl = encodeURIComponent('https://sarkariresult.com');
         const apiFeed = `https://rss2json.com{rssUrl}`;
 
         fetch(apiFeed)
@@ -41,6 +64,35 @@
             .catch(err => {
                 document.getElementById('jobs-container').innerHTML = "Failed to load jobs. Refreshing...";
             });
+
+        // 📈 2. AUTOMATIC 30-SECOND AD REFRESH LOGIC (3x Revenue Loop)
+        function loadAdsterraAd() {
+            const adWrapper = document.getElementById('adsterra-banner-wrapper');
+            adWrapper.innerHTML = ''; // Purane ad element ko saaf karega
+
+            // Naya ad container dynamic create hoga
+            const adDiv = document.createElement('div');
+            adDiv.id = 'container-ef01e6ec40ea64b1df763ecc297ccfba';
+            adWrapper.appendChild(adDiv);
+
+            // Adsterra ka script invoke plugin generate hoga
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.setAttribute('data-cfasync', 'false');
+            script.src = 'https://pl31185955.profitableratecpmnetwork.com/ef01e6ec40ea64b1df763ecc297ccfba/invoke.js';
+            
+            adWrapper.appendChild(script);
+            console.log("Adsterra Ad Refreshed Successfully!");
+        }
+
+        // Pehli baar screen khulte hi ad chalega
+        loadAdsterraAd();
+
+        // ⏱️ Har 30 Second (30000 milliseconds) mein ad automatic badlega
+        setInterval(function() {
+            loadAdsterraAd();
+        }, 30000);
     </script>
 </body>
 </html>
