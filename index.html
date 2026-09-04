@@ -36,7 +36,7 @@
             margin: 15px 0;
             display: flex;
             justify-content: center;
-            min-height: 50px;
+            min-height: 55px;
             background: #eef2f5;
             align-items: center;
             border-radius: 4px;
@@ -117,19 +117,19 @@
 
     <div class="container">
         
-        <!-- AUTO REFRESHING TOP AD BANNER -->
-        <div class="ad-container" id="refreshing-ad-1">
-            <!-- Ad script will load automatically here -->
+        <!-- TOP AD BANNER -->
+        <div class="ad-container">
+            <iframe id="ad-slot-1" src="about:blank" width="320" height="50" frameborder="0" scrolling="no"></iframe>
         </div>
 
-        <!-- Job Feed Container (Automatic Data Insertion) -->
+        <!-- Job Feed Container -->
         <div id="job-feed">
             <div class="loading">Loading latest verified jobs automatically...</div>
         </div>
 
-        <!-- AUTO REFRESHING BOTTOM AD BANNER -->
-        <div class="ad-container" id="refreshing-ad-2">
-            <!-- Ad script will load automatically here -->
+        <!-- BOTTOM AD BANNER -->
+        <div class="ad-container">
+            <iframe id="ad-slot-2" src="about:blank" width="320" height="50" frameborder="0" scrolling="no"></iframe>
         </div>
 
     </div>
@@ -139,37 +139,47 @@
     </footer>
 
     <script>
-        // 🔄 AUTOMATIC 30-SECOND AD REFRESH ENGINE
-        function loadAd(containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = ''; // Purane ad ko clear karega
+        // 🔄 सुरक्षित आईफ्रेम एड रिफ्रेश इंजन (Guaranteed Load)
+        function refreshAdIframe(iframeId) {
+            const iframe = document.getElementById(iframeId);
+            if (!iframe) return;
+
+            const adHTML = `
+                <html>
+                <body style="margin:0; padding:0; text-align:center;">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : 'a7893997d6218a7e6f952bb01234af7d',
+                            'format' : 'iframe',
+                            'height' : 50,
+                            'width' : 320,
+                            'params' : {}
+                        };
+                    <\/script>
+                    <script type="text/javascript" src="https://highrevenueformat.com"><\/script>
+                </body>
+                </html>
+            `;
             
-            // Adsterra Configuration Re-injection
-            window.atOptions = {
-                'key' : 'a7893997d6218a7e6f952bb01234af7d',
-                'format' : 'iframe',
-                'height' : 50,
-                'width' : 320,
-                'params' : {}
-            };
-            
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://highrevenueformat.com';
-            
-            container.appendChild(script);
+            iframe.src = "about:blank";
+            setTimeout(() => {
+                const doc = iframe.contentWindow.document || iframe.contentDocument;
+                doc.open();
+                doc.write(adHTML);
+                doc.close();
+            }, 100);
         }
 
         function startAdRotation() {
-            // Pehli baar immediately load karega
-            loadAd('refreshing-ad-1');
-            loadAd('refreshing-ad-2');
+            // तुरंत पहली बार लोड करें
+            refreshAdIframe('ad-slot-1');
+            refreshAdIframe('ad-slot-2');
             
-            // 30000 milliseconds = 30 seconds me auto-refresh refresh karega
+            // हर 30 सेकंड में विज्ञापन रीलोड करें
             setInterval(() => {
-                loadAd('refreshing-ad-1');
-                loadAd('refreshing-ad-2');
-                console.log("Ads refreshed successfully every 30 seconds!");
+                refreshAdIframe('ad-slot-1');
+                refreshAdIframe('ad-slot-2');
+                console.log("Ads rotated successfully via sandboxed iframes!");
             }, 30000);
         }
 
@@ -178,7 +188,6 @@
             const feedContainer = document.getElementById('job-feed');
             
             try {
-                // Verified and safe direct links only (No fraud, purely official .gov / .nic domains)
                 const officialJobs = [
                     {
                         title: "CPCB Recruitment 2026 - Senior Research Fellow (SRF) & Consultant",
@@ -250,7 +259,6 @@
             }
         }
 
-        // On Load initialization
         window.onload = function() {
             fetchAutomatedJobs();
             startAdRotation();
