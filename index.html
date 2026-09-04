@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qualitracker | Latest Government Job Alerts</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        .job-card { padding: 15px; border-bottom: 1px solid #ddd; margin-bottom: 10px; }
+        .job-title { font-size: 18px; color: #007bff; font-weight: bold; text-decoration: none; }
+        .job-date { font-size: 12px; color: #888; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Qualitracker - Live Exam & Job Alerts</h1>
+        <div id="jobs-container">Loading latest jobs automatically...</div>
+    </div>
+
+    <script>
+        // Yeh script bina aapke kuch kiye Google ke zariye live job feeds fetch karegi
+        const rssUrl = encodeURIComponent('https://sarkariresult.com'); // Aap yahan kisi bhi site ka feed daal sakte hain
+        const apiFeed = `https://rss2json.com{rssUrl}`;
+
+        fetch(apiFeed)
+            .then(res => res.json())
+            .then(data => {
+                let html = '';
+                data.items.forEach(item => {
+                    html += `
+                        <div class="job-card">
+                            <a href="${item.link}" target="_blank" class="job-title">${item.title}</a>
+                            <div class="job-date">Posted on: ${item.pubDate}</div>
+                        </div>
+                    `;
+                });
+                document.getElementById('jobs-container').innerHTML = html;
+            })
+            .catch(err => {
+                document.getElementById('jobs-container').innerHTML = "Failed to load jobs. Refreshing...";
+            });
+    </script>
+</body>
+</html>
